@@ -1,5 +1,17 @@
-import Split from 'split.js'
+import split from 'split.js'
 
-const root = Split(['#instructions', '#code'])
+const splitOptions = {
+  elementStyle: (dimension, size, gutterSize) => ({
+    'flex-basis': `calc(${size}% - ${gutterSize}px)`,
+  }),
+  gutterStyle: (dimension, gutterSize) => ({
+    'flex-basis': `${gutterSize}px`,
+  }),
+}
 
-const code = Split(['#editor', '#output'])
+split(['#instructions', '#code'], splitOptions)
+
+split(['#editor', '#output'], {
+  direction: 'vertical',
+  ...splitOptions
+})
