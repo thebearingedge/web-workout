@@ -33,7 +33,10 @@ module.exports = {
   },
   plugins: [
     new MonacoWebpackPlugin({
-      languages: ['html', 'css', 'javascript']
+      publicPath: '/',
+      features: ['multicursor'],
+      filename: '[name].worker.js',
+      languages: ['html', 'css', 'javascript', 'typescript']
     })
   ],
   devtool: 'source-map',
