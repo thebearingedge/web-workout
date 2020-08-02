@@ -105,7 +105,7 @@ async function runTests({ code }) {
 
 async function instantiateEditor(container) {
 
-  await loadWASM('/onigasm/onigasm.wasm')
+  await loadWASM('/onigasm.wasm')
 
   const registry = new Registry({
     getGrammarDefinition: async scope => {
@@ -123,6 +123,7 @@ async function instantiateEditor(container) {
   const editor = monaco.editor.create(container, {
     theme: 'monokai',
     language: 'javascript',
+    wordWrap: 'off',
     tabSize: 2,
     fontSize: 15,
     fontFamily: 'Hack, Menlo, Monaco, "Courier New", monospace',

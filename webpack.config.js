@@ -30,10 +30,7 @@ module.exports = {
         test: /\.worker\.js$/,
         include: clientPath,
         use: {
-          loader: 'worker-loader',
-          options: {
-            publicPath: '/'
-          }
+          loader: 'worker-loader'
         }
       }
     ]
@@ -47,8 +44,8 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: 'node_modules/onigasm/lib/**/*',
-          to: 'onigasm/',
+          from: 'node_modules/onigasm/lib/onigasm.wasm',
+          to: path.join(publicPath),
           flatten: true
         }
       ]

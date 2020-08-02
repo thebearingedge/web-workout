@@ -20,7 +20,8 @@
       flex-direction: column;
     }
     #editor-container {
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: hidden;
       scrollbar-width: none;
       -ms-overflow-style: none;
     }
@@ -37,7 +38,7 @@
   <div id="root">
     <div id="instructions"></div>
     <div id="code">
-      <div id="editor-container" style="overflow:scroll;">
+      <div id="editor-container">
         <div id="editor" style="visibility:hidden;height:100%"></div>
       </div>
       <div id="output">
