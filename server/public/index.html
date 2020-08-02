@@ -6,36 +6,12 @@
   <title>Web Workout</title>
   <link rel="icon" href="/favicon.ico">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css">
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-    html,
-    body {
-      height: 100%;
-    }
-    #root {
-      height: 100%;
-      display: flex;
-    }
-    #code {
-      display: flex;
-      flex-direction: column;
-    }
-    #editor-container {
-      overflow-x: hidden;
-      overflow-y: hidden;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-    #editor-container::-webkit-scrollbar {
-      display: none;
-    }
-    .gutter.gutter-vertical,
-    .gutter.gutter-horizontal {
-      background-color: rgb(63, 63, 63);
-    }
-  </style>
+  <link
+    rel="stylesheet"
+    crossorigin="anonymous"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+    integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" />
+  <link rel="stylesheet" href="/styles.css">
 </head>
 <body style="margin:0">
   <div id="root">
@@ -45,11 +21,15 @@
         <div id="editor" style="visibility:hidden;height:100%"></div>
       </div>
       <div id="output">
-        <button id="run-tests">Run Tests</button>
+        <div id="output-header">
+          <button id="run-tests" class="bg-blue">
+            <i class="fas fa-play"></i>&nbsp;&nbsp;Run Tests
+          </button>
+        </div>
         <div id="report"></div>
       </div>
     </div>
   </div>
-  <script src="main.js"></script>
+  <script src="/main.js"></script>
 </body>
 </html>

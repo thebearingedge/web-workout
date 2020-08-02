@@ -1,0 +1,80 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+  display: flex;
+}
+
+#code {
+  display: flex;
+  flex-direction: column;
+}
+
+#output {
+  background-color: #242424;
+}
+
+#output-header {
+  display: flex;
+  height: 48px;
+  padding: 0 0.5rem;
+  align-items: center;
+}
+
+#output-header #run-tests {
+  justify-self: flex-end;
+}
+
+#editor-container {
+  overflow-x: hidden;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+#editor-container::-webkit-scrollbar {
+  display: none;
+}
+
+.gutter.gutter-vertical,
+.gutter.gutter-horizontal {
+  background-color: rgb(63, 63, 63);
+}
+
+.gutter.gutter-vertical {
+  cursor: row-resize;
+}
+
+.gutter.gutter-horizontal {
+  cursor: col-resize;
+}
+
+button {
+  padding: 0.5rem;
+  border: none;
+  border-radius: 0.15rem;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+button:focus,
+button:active {
+  outline: none;
+}
+
+.bg-blue {
+  background-color: rgb(66, 126, 255);
+}
+
+button.bg-blue {
+  color: white;
+}
