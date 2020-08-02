@@ -29,6 +29,8 @@ function foo() {
   return "bar"
 }
 
+// ignore this plz
+
 if (!foo) {
   throw new Error('wat')
 }
@@ -48,15 +50,13 @@ it('returns "baz"', () => {
 
 `
 
-
-
 ;(async () => {
 
   const $editor = document.querySelector('#editor')
   const editor = await instantiateEditor($editor)
 
-  $editor.style.visibility = ''
   editor.setValue(source)
+  $editor.style.visibility = ''
 
   let running = false
 
@@ -100,13 +100,15 @@ async function runTests({ code }) {
 }
 
 async function instantiateEditor(container) {
+
   await loadWASM('/onigasm/onigasm.wasm')
+
   const registry = new Registry({
-    getGrammarDefinition: async (scope) => {
-      return {
-        format: 'json',
-        content: await fetch(`/grammars/${scope}.json`).then(res => res.text())
-      }
+    getGrammarDefinition: async scope => {
+      const format = 'json'
+      const grammarUrl = `/grammars/${scope}.json`
+      const content = await fetch(grammarUrl).then(res => res.text())
+      return { format, content }
     }
   })
   const grammars = new Map([
@@ -118,7 +120,8 @@ async function instantiateEditor(container) {
     theme: 'monokai',
     language: 'javascript',
     tabSize: 2,
-    fontSize: 16,
+    fontSize: 15,
+    fontFamily: 'Hack, Menlo, Monaco, "Courier New", monospace',
     renderWhitespace: 'all',
     renderIndentGuides: true,
     formatOnPaste: true,
@@ -126,6 +129,9 @@ async function instantiateEditor(container) {
       enabled: false
     }
   })
+
+  await monaco.languages.typescript.getJavaScriptWorker()
   await wireTmGrammars(monaco, registry, grammars, editor)
+
   return editor
 }
