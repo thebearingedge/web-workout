@@ -4,7 +4,7 @@
   "description": "An in-browser front end tester (prototype).",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --mode=production",
+    "build": "webpack --mode=none",
     "dev": "npm-run-all --silent --parallel dev:*",
     "dev:client": "webpack-dev-server",
     "dev:server": "nodemon server/"
@@ -24,6 +24,18 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "copy-webpack-plugin": "^6.0.3",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mocha": "^8.1.0",
+    "monaco-editor": "^0.20.0",
+    "monaco-editor-textmate": "^2.2.1",
+    "monaco-textmate": "^3.0.1",
+    "onigasm": "^2.2.4",
+    "split.js": "^1.6.2"
+  },
   "devDependencies": {
     "css-loader": "^4.2.0",
     "eslint": "^7.6.0",
@@ -36,13 +48,5 @@
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0",
     "worker-loader": "^3.0.0"
-  },
-  "dependencies": {
-    "chai": "^4.2.0",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "mocha": "^8.1.0",
-    "monaco-editor": "^0.20.0",
-    "split.js": "^1.6.2"
   }
 }

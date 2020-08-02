@@ -1,5 +1,6 @@
 require('dotenv/config')
 const path = require('path')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 
 const clientPath = path.join(__dirname, 'client')
@@ -40,9 +41,18 @@ module.exports = {
   plugins: [
     new MonacoWebpackPlugin({
       publicPath: '/',
-      features: ['multicursor'],
+      features: ['multicursor', 'bracketMatching'],
       filename: '[name].worker.js',
-      languages: ['html', 'css', 'javascript', 'typescript']
+      languages: ['javascript']
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'node_modules/onigasm/lib/**/*',
+          to: 'onigasm/',
+          flatten: true
+        }
+      ]
     })
   ],
   devtool: 'source-map',
