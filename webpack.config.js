@@ -6,12 +6,8 @@ const clientPath = path.join(__dirname, 'client')
 const publicPath = path.join(__dirname, 'server', 'public')
 
 module.exports = {
-  entry: {
-    main: path.join(clientPath, 'app'),
-    tester: path.join(clientPath, 'test')
-  },
+  entry: clientPath,
   output: {
-    filename: '[name].js',
     path: publicPath
   },
   module: {
@@ -28,6 +24,16 @@ module.exports = {
         use: [
           'file-loader'
         ]
+      },
+      {
+        test: /\.worker\.js$/,
+        include: clientPath,
+        use: {
+          loader: 'worker-loader',
+          options: {
+            publicPath: '/'
+          }
+        }
       }
     ]
   },
