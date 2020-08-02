@@ -1,6 +1,8 @@
 import { expect } from 'chai'
 import mocha, { Mocha } from 'mocha/mocha'
 
+self.expect = expect
+
 const {
   EVENT_RUN_BEGIN,
   EVENT_TEST_PASS,
@@ -8,54 +10,42 @@ const {
   EVENT_RUN_END
 } = Mocha.Runner.constants
 
-let subject
-
 mocha.setup({
   ui: 'bdd',
   reporter: function () {},
-  cleanReferencesAfterRun: false
 })
 
-self.addEventListener('message', ({ data }) => {
-  const { code, functionName } = data
-  subject = functionName
+self.addEventListener('message', ({ data: { code } }) => {
   import(/* webpackIgnore: true */ code)
     .then(imported => {
-      mocha
-        .run()
-        .on(EVENT_RUN_BEGIN, handleRunBegin)
-        .on(EVENT_TEST_PASS, handleTestPass)
-        .on(EVENT_TEST_FAIL, handleTestFail)
-        .on(EVENT_RUN_END, handleRunEnd)
+      return new Promise((resolve, reject) => {
+        const results = []
+        try {
+          mocha
+            .run()
+            .on(EVENT_TEST_PASS, test => results.push({
+              event: EVENT_TEST_PASS,
+              test: {
+                title: test.title
+              }
+            }))
+            .on(EVENT_TEST_FAIL, (test, err) => results.push({
+              event: EVENT_TEST_FAIL,
+              test: {
+                title: test.title,
+                error: err.message,
+                actual: err.actual,
+                expected: err.expected
+              }
+            }))
+            .on(EVENT_RUN_END, () => resolve(results))
+        } catch (err) {
+          reject(err)
+        }
+      })
+
     })
-    .catch(err => console.error(err))
+    .then(results => self.postMessage({ success: true, data: { results } }))
+    .catch(err => self.postMessage({ success: false, data: { error: { ...err } } }))
+    .finally(() => self.close())
 })
-
-function handleRunBegin() {
-  self.postMessage({ event: EVENT_RUN_BEGIN })
-}
-
-function handleTestPass(test) {
-  self.postMessage({
-    event: EVENT_TEST_PASS,
-    test: {
-      title: test.title
-    }
-  })
-}
-
-function handleTestFail(test, err) {
-  self.postMessage({
-    event: EVENT_TEST_FAIL,
-    test: {
-      title: test.title,
-      error: err.message,
-      actual: err.actual,
-      expected: err.expected
-    }
-  })
-}
-
-function handleRunEnd() {
-  self.postMessage({ event: EVENT_RUN_END })
-}

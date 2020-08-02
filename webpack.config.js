@@ -42,8 +42,7 @@ module.exports = {
     new MonacoWebpackPlugin({
       publicPath: '/',
       features: ['multicursor', 'bracketMatching'],
-      filename: '[name].worker.js',
-      languages: ['javascript']
+      languages: ['html', 'css', 'javascript']
     }),
     new CopyWebpackPlugin({
       patterns: [
