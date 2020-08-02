@@ -6,21 +6,17 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import monokai from './monokai'
 import TestRunner from './test-runner.worker'
 
-const splitOptions = {
+split(['#instructions', '#code']).setSizes([2 / 5, 3 / 5].map(n => n * 100))
+
+split(['#editor-container', '#output'], {
+  direction: 'vertical',
   elementStyle: (dimension, size, gutterSize) => ({
     'flex-basis': `calc(${size}% - ${gutterSize}px)`,
   }),
   gutterStyle: (dimension, gutterSize) => ({
     'flex-basis': `${gutterSize}px`,
-  })
-}
-
-split(['#instructions', '#code'], splitOptions).setSizes([2 / 5, 3 / 5].map(n => n * 100))
-
-split(['#editor-container', '#output'], {
-  direction: 'vertical',
-  ...splitOptions,
-})
+  }),
+}).setSizes([3 / 5, 2 / 5].map(n => n * 100))
 
 monaco.editor.defineTheme('monokai', monokai)
 
