@@ -1,5 +1,6 @@
 require('dotenv/config')
 const path = require('path')
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 
 const clientPath = path.join(__dirname, 'client')
 const publicPath = path.join(__dirname, 'server', 'public')
@@ -13,6 +14,28 @@ module.exports = {
     filename: '[name].js',
     path: publicPath
   },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
+      },
+      {
+        test: /\.ttf$/,
+        use: [
+          'file-loader'
+        ]
+      }
+    ]
+  },
+  plugins: [
+    new MonacoWebpackPlugin({
+      languages: ['html', 'css', 'javascript']
+    })
+  ],
   devtool: 'source-map',
   devServer: {
     contentBase: publicPath,

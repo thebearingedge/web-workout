@@ -1,4 +1,5 @@
 import split from 'split.js'
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 
 const splitOptions = {
   elementStyle: (dimension, size, gutterSize) => ({
@@ -15,3 +16,12 @@ split(['#editor', '#output'], {
   direction: 'vertical',
   ...splitOptions
 })
+
+monaco.editor.create(document.querySelector('#editor'), {
+  theme: 'vs-dark',
+  language: 'javascript'
+})
+
+const runner = new Worker('/tester.js')
+
+runner.postMessage({ code: 'function log() { console.log("hi") }'})
