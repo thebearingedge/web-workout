@@ -12,14 +12,14 @@ const splitOptions = {
   }),
   gutterStyle: (dimension, gutterSize) => ({
     'flex-basis': `${gutterSize}px`,
-  }),
+  })
 }
 
-split(['#instructions', '#code'], splitOptions).setSizes([2/5, 3/5].map(n => n * 100))
+split(['#instructions', '#code'], splitOptions).setSizes([2 / 5, 3 / 5].map(n => n * 100))
 
-split(['#editor', '#output'], {
+split(['#editor-container', '#output'], {
   direction: 'vertical',
-  ...splitOptions
+  ...splitOptions,
 })
 
 monaco.editor.defineTheme('monokai', monokai)
@@ -54,6 +54,10 @@ it('returns "baz"', () => {
 
   const $editor = document.querySelector('#editor')
   const editor = await instantiateEditor($editor)
+
+  new ResizeObserver(entries => {
+    for (const _ of entries) editor.layout()
+  }).observe($editor.parentElement)
 
   editor.setValue(source)
   $editor.style.visibility = ''
