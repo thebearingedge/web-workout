@@ -13,12 +13,12 @@ split(['#editor-container', '#output'], {
   gutterStyle: (dimension, gutterSize) => ({
     'flex-basis': `${gutterSize}px`
   })
-}).setSizes([3 / 5, 2 / 5].map(n => n * 100))
+})
 
 const instructions = `
 ## trim-zeros
 
-Define a function named \`trimZeros\` which takes a numeric \`string\` it with leading and trailing zeros removed.
+Define a function named \`trimZeros\` which takes a numeric \`string\` and returns it with leading and trailing zeros removed.
 
 #### Syntax
 
