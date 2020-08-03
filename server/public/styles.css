@@ -43,6 +43,10 @@ body {
   display: none;
 }
 
+#instructions {
+  overflow-y: scroll;
+}
+
 .gutter.gutter-vertical,
 .gutter.gutter-horizontal {
   background-color: rgb(63, 63, 63);
@@ -104,6 +108,7 @@ pre code {
   font-family: 'SFMono-Regular', Consolas, Liberation Mono, Menlo, monospace;
 
 }
+
 
 .token.function,
 .token.attr-name,

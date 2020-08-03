@@ -16,25 +16,25 @@ split(['#editor-container', '#output'], {
 }).setSizes([3 / 5, 2 / 5].map(n => n * 100))
 
 const instructions = `
-# trim-zeros
+## trim-zeros
 
 Define a function named \`trimZeros\` which takes a numeric \`string\` it with leading and trailing zeros removed.
 
-### Syntax
+#### Syntax
 
 \`\`\`js
 result = trimZeros(numericString)
 \`\`\`
 
-### Parameters
+#### Parameters
 
 - \`numericString\` - a \`string\` containing number characters
 
-### Return Value
+#### Return Value
 
 The value of \`numeric\` string with leading and trailing zeros removed.
 
-### Examples
+#### Examples
 
 \`\`\`js
 trimZeros("00032.2000")   // -> "32.2"
