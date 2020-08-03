@@ -1,24 +1,18 @@
 import split from 'split.js'
-import { loadWASM } from 'onigasm'
-import { Registry } from 'monaco-textmate'
-import { wireTmGrammars } from 'monaco-editor-textmate'
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
-import monokai from './monokai'
-import TestRunner from './test-runner.worker'
+import runTests from './output-panel'
+import instantiateEditor from './editor'
 
 split(['#instructions', '#code']).setSizes([2 / 5, 3 / 5].map(n => n * 100))
 
 split(['#editor-container', '#output'], {
   direction: 'vertical',
   elementStyle: (dimension, size, gutterSize) => ({
-    'flex-basis': `calc(${size}% - ${gutterSize}px)`,
+    'flex-basis': `calc(${size}% - ${gutterSize}px)`
   }),
   gutterStyle: (dimension, gutterSize) => ({
-    'flex-basis': `${gutterSize}px`,
-  }),
+    'flex-basis': `${gutterSize}px`
+  })
 }).setSizes([3 / 5, 2 / 5].map(n => n * 100))
-
-monaco.editor.defineTheme('monokai', monokai)
 
 const source = `
 function foo() {
@@ -30,7 +24,19 @@ function foo() {
 if (!foo) {
   throw new Error('wat')
 }
-`.trim()
+
+function mirrorBits(a) {
+  return parseInt([...a.toString(2)].reduce((bin, bit) => bit + bin), 2)
+}
+
+function tennisSet(score1, score2) {
+  if (score1 === 6 && score2 < 5) return true
+  if (score2 === 6 && score1 < 5) return true
+  if (Math.min(5, score1, score2) !== 5) return false
+  if (Math.max(7, score1, score2) !== 7) return false
+  return score1 < 7 ? score2 === 7 : score2 < 7
+}
+`.trimLeft()
 
 const tests = `
 
@@ -43,7 +49,6 @@ it('returns "baz"', () => {
   const result = foo()
   expect(result).to.equal({ foo: 'bar' })
 })
-
 `
 
 ;(async () => {
@@ -78,61 +83,3 @@ it('returns "baz"', () => {
     }
   })
 })()
-
-async function runTests({ code }) {
-  return new Promise((resolve, reject) => {
-    const runner = new TestRunner()
-    const timeout = setTimeout(() => {
-      runner.terminate()
-      reject(new Error('5 second timeout exceeded'))
-    }, 5000)
-    const onError = err => {
-      clearTimeout(timeout)
-      reject(err)
-    }
-    runner.addEventListener('error', onError)
-    runner.addEventListener('messageerror', onError)
-    runner.postMessage({ code })
-    runner.addEventListener('message', ({ data: { success, data } }) => {
-      resolve({ success, data })
-    })
-  })
-}
-
-async function instantiateEditor(container) {
-
-  await loadWASM('/onigasm.wasm')
-
-  const registry = new Registry({
-    getGrammarDefinition: async scope => {
-      const format = 'json'
-      const grammarUrl = `/grammars/${scope}.json`
-      const content = await fetch(grammarUrl).then(res => res.text())
-      return { format, content }
-    }
-  })
-  const grammars = new Map([
-    ['html', 'text.html.basic'],
-    ['css', 'source.css'],
-    ['javascript', 'source.js']
-  ])
-  const editor = monaco.editor.create(container, {
-    theme: 'monokai',
-    language: 'javascript',
-    wordWrap: 'off',
-    tabSize: 2,
-    fontSize: 15,
-    fontFamily: 'Hack, Menlo, Monaco, "Courier New", monospace',
-    renderWhitespace: 'all',
-    renderIndentGuides: true,
-    formatOnPaste: true,
-    minimap: {
-      enabled: false
-    }
-  })
-
-  await monaco.languages.typescript.getJavaScriptWorker()
-  await wireTmGrammars(monaco, registry, grammars, editor)
-
-  return editor
-}

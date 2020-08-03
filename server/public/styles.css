@@ -60,10 +60,17 @@ button {
   padding: 0.5rem;
   border: none;
   border-radius: 0.15rem;
+  filter: brightness(1);
+  transition: filter 0.15s;
 }
 
 button:hover {
   cursor: pointer;
+  filter: brightness(1.1);
+}
+
+button:active {
+  filter: brightness(1);
 }
 
 button:focus,
