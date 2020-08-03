@@ -27,6 +27,28 @@ module.exports = {
         ]
       },
       {
+        test: /node_modules\/prismjs/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            plugins: [
+              ['babel-plugin-prismjs', {
+                languages: [
+                  'markup',
+                  'javascript',
+                  'js-extras',
+                  'jsx',
+                  'css',
+                  'css-extras',
+                  'typescript',
+                  'tsx'
+                ]
+              }]
+            ]
+          }
+        }
+      },
+      {
         test: /\.worker\.js$/,
         include: clientPath,
         use: {
