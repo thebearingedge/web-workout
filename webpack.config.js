@@ -73,6 +73,10 @@ module.exports = {
       ]
     })
   ],
+  node: {
+    fs: 'empty'
+  },
+  stats: 'minimal',
   devtool: 'source-map',
   devServer: {
     contentBase: publicPath,
@@ -82,7 +86,6 @@ module.exports = {
     proxy: {
       '/api': `http://localhost:${process.env.PORT}`
     },
-    stats: 'minimal',
     watchContentBase: true
   }
 }

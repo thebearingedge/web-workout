@@ -1,21 +1,45 @@
-import TestRunner from './test-runner.worker'
+import { wrap } from 'comlink'
+import Worker from './test-runner.worker'
 
-export default async function runTests({ code }) {
-  return new Promise((resolve, reject) => {
-    const runner = new TestRunner()
-    const timeout = setTimeout(() => {
-      runner.terminate()
-      reject(new Error('5 second timeout exceeded'))
-    }, 5000)
-    const onError = err => {
-      clearTimeout(timeout)
-      reject(err)
+class TimeoutError extends Error {
+  constructor(...args) {
+    super(...args)
+    this.name = 'Timeout'
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, this.constructor)
     }
-    runner.addEventListener('error', onError)
-    runner.addEventListener('messageerror', onError)
-    runner.postMessage({ code })
-    runner.addEventListener('message', ({ data: { success, data } }) => {
-      resolve({ success, data })
-    })
-  })
+  }
+}
+
+export default async function instantiateTestRunner($report) {
+  let worker = new Worker()
+  let TestRunner = wrap(worker)
+  let testRunner = await new TestRunner()
+
+  async function setup() {
+    worker = new Worker()
+    TestRunner = wrap(worker)
+    testRunner = await new TestRunner()
+  }
+
+  async function run({ code, tests }) {
+    try {
+      const report = await new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          worker.terminate()
+          reject(new TimeoutError('5 second timeout exceeded'))
+        }, 5000)
+        testRunner
+          .test({ code, tests })
+          .then(resolve, reject)
+          .finally(() => clearTimeout(timeout))
+      })
+      return { error: null, report }
+    } catch (error) {
+      await setup()
+      return { error, report: null }
+    }
+  }
+
+  return { run }
 }

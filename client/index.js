@@ -2,6 +2,7 @@ import split from 'split.js'
 import runTests from './output-panel'
 import instantiateEditor from './editor'
 import renderInstructions from './instructions'
+import instantiateTestRunner from './output-panel'
 
 split(['#instructions', '#code']).setSizes([2 / 5, 3 / 5].map(n => n * 100))
 
@@ -68,47 +69,41 @@ function tennisSet(score1, score2) {
 `.trimLeft()
 
 const tests = `
-
-it('returns "bar"', () => {
-  const result = foo()
-  expect(result).to.equal('bar')
+test("true is indeed true", t => {
+  t.equal(true, true)
+  t.end()
 })
 
-it('returns "baz"', () => {
-  const result = foo()
-  expect(result).to.equal({ foo: 'bar' })
+test("or is it?", t => {
+  t.equal(true, false)
+  t.end()
 })
 `
 
 ;(async () => {
 
-  const $editor = document.querySelector('#editor')
   const $instructions = document.querySelector('#instructions')
-  const editor = await instantiateEditor($editor)
   renderInstructions($instructions, instructions)
 
-  new ResizeObserver(entries => {
-    for (const _ of entries) editor.layout()
-  }).observe($editor.parentElement)
+  const $editor = document.querySelector('#editor')
+  const editor = await instantiateEditor($editor)
 
   editor.setValue(source)
   $editor.style.visibility = ''
+
+  const $report = document.querySelector('#report')
+  const runner = await instantiateTestRunner($report)
 
   let running = false
 
   document.querySelector('#run-tests').addEventListener('click', async () => {
     if (running) return
-    const source = editor.getValue().trimEnd()
-    if (!source) return
-    const encoded = encodeURIComponent(`${source}\n\n${tests}`)
-    const code = `data:text/javascript;charset=utf-8,${encoded}`
+    const code = editor.getValue().trimEnd()
+    if (!code) return
     running = true
     try {
-      const { success, data } = await runTests({ code })
-      console.log('success', success)
-      console.log('data', data)
-    } catch (err) {
-      console.error(err)
+      const result = await runner.run({ code, tests })
+      console.log(result)
     } finally {
       running = false
     }

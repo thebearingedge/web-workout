@@ -38,6 +38,10 @@ export default async function instantiateEditor(container) {
     }
   })
 
+  new ResizeObserver(entries => {
+    for (const _ of entries) editor.layout()
+  }).observe(container.parentElement)
+
   await monaco.languages.typescript.getJavaScriptWorker()
   await wireTmGrammars(monaco, registry, grammars, editor)
 
