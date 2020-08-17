@@ -1,5 +1,5 @@
 import { wrap } from 'comlink'
-import Worker from './test-runner.worker'
+import Runner from './test-runner.worker'
 
 class TimeoutError extends Error {
   constructor(...args) {
@@ -12,31 +12,27 @@ class TimeoutError extends Error {
 }
 
 export default async function instantiateTestRunner($report) {
-  let worker = new Worker()
-  let TestRunner = wrap(worker)
-  let testRunner = await new TestRunner()
 
-  async function setup() {
-    worker = new Worker()
-    TestRunner = wrap(worker)
-    testRunner = await new TestRunner()
-  }
+  let worker = new Runner()
+  let runTests = wrap(worker)
 
   async function run({ code, tests }) {
     try {
-      const report = await new Promise((resolve, reject) => {
+      const { error, report } = await new Promise((resolve, reject) => {
         const timeout = setTimeout(() => {
           worker.terminate()
           reject(new TimeoutError('5 second timeout exceeded'))
         }, 5000)
-        testRunner
-          .test({ code, tests })
+        runTests({ code, tests })
           .then(resolve, reject)
           .finally(() => clearTimeout(timeout))
       })
-      return { error: null, report }
+      return { error, report }
     } catch (error) {
-      await setup()
+      if (error instanceof TimeoutError) {
+        worker = new Runner()
+        runTests = wrap(worker)
+      }
       return { error, report: null }
     }
   }

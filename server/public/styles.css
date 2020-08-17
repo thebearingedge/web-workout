@@ -65,7 +65,7 @@ button {
   border: none;
   border-radius: 0.15rem;
   filter: brightness(1);
-  transition: filter 0.15s;
+  transition: background-color 0.15s, filter 0.15s;
 }
 
 button:hover {
@@ -103,12 +103,17 @@ pre {
   background-color: #f6f8fa;
   border-radius: 6px;
 }
+
 pre code {
   color: inherit;
   font-family: 'SFMono-Regular', Consolas, Liberation Mono, Menlo, monospace;
-
 }
 
+#run-tests:disabled {
+  cursor: not-allowed;
+  filter: brightness(1);
+  background-color: gray;
+}
 
 .token.function,
 .token.attr-name,

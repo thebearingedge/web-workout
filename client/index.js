@@ -1,5 +1,4 @@
 import split from 'split.js'
-import runTests from './output-panel'
 import instantiateEditor from './editor'
 import renderInstructions from './instructions'
 import instantiateTestRunner from './output-panel'
@@ -94,18 +93,30 @@ test("or is it?", t => {
   const $report = document.querySelector('#report')
   const runner = await instantiateTestRunner($report)
 
-  let running = false
+  const $runTests = document.querySelector('#run-tests')
 
-  document.querySelector('#run-tests').addEventListener('click', async () => {
-    if (running) return
-    const code = editor.getValue().trimEnd()
-    if (!code) return
-    running = true
+  $runTests.addEventListener('click', async () => {
     try {
-      const result = await runner.run({ code, tests })
+      const code = editor.getValue().trimRight()
+      if (!code) return
+      $runTests.firstElementChild.classList.remove('fas', 'fa-play')
+      $runTests.firstElementChild.classList.add('fa', 'fa-hourglass-half')
+      $runTests.disabled = true
+      const [result] = await Promise.all([
+        runner.run({ code, tests }),
+        delay(2000)
+      ])
       console.log(result)
+    } catch (err) {
+      console.error(err)
     } finally {
-      running = false
+      $runTests.disabled = false
+      $runTests.firstElementChild.classList.add('fas', 'fa-play')
+      $runTests.firstElementChild.classList.remove('fa', 'fa-hourglass-half')
     }
   })
 })()
+
+function delay(time) {
+  return new Promise(resolve => setTimeout(resolve, time))
+}
