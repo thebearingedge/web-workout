@@ -8,7 +8,8 @@
     "build": "webpack --mode=production",
     "dev": "npm-run-all --silent --parallel dev:*",
     "dev:client": "webpack-dev-server",
-    "dev:server": "nodemon server/"
+    "dev:server": "nodemon server/",
+    "db:up": "db-migrate up -e app"
   },
   "nodemonConfig": {
     "exec": "node -r dotenv/config",
@@ -23,7 +24,8 @@
     ]
   },
   "eslintIgnore": [
-    "server/public/"
+    "server/public/",
+    "migrations/"
   ],
   "eslintConfig": {
     "env": {
@@ -84,29 +86,29 @@
     "remark-parse": "^8.0.3",
     "split.js": "^1.6.2",
     "tape": "^5.0.1",
-    "unified": "^9.1.0"
+    "unified": "^9.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.11.1",
+    "@babel/core": "^7.11.6",
     "babel-loader": "^8.1.0",
     "babel-plugin-prismjs": "^2.0.1",
-    "copy-webpack-plugin": "^6.0.3",
-    "css-loader": "^4.2.1",
-    "eslint": "^7.7.0",
+    "copy-webpack-plugin": "^6.1.0",
+    "css-loader": "^4.2.2",
+    "eslint": "^7.8.1",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "file-loader": "^6.0.0",
+    "file-loader": "^6.1.0",
     "monaco-editor-webpack-plugin": "^1.9.0",
     "nodemon": "^2.0.4",
     "npm-run-all": "^4.1.5",
     "style-loader": "^1.2.1",
-    "typescript": "^3.9.7",
+    "typescript": "^4.0.2",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0",
-    "worker-loader": "^3.0.1"
+    "worker-loader": "^3.0.2"
   }
 }
