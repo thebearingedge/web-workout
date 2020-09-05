@@ -32,7 +32,7 @@ result = trimZeros(numericString)
 
 #### Return Value
 
-The value of \`numeric\` string with leading and trailing zeros removed.
+The value of \`numericString\` with leading and trailing zeros removed.
 
 #### Examples
 

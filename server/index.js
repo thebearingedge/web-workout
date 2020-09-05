@@ -1,10 +1,15 @@
-const path = require('path')
-const express = require('express')
+const createApi = require('./create-api')
+const { connectToPostgres } = require('../database')
 
-const app = express()
+const { PORT } = process.env
 
-app.use(express.static(path.join(__dirname, 'public')))
-
-app.listen(process.env.PORT, () => {
-  console.log('server listening on port', process.env.PORT)
+;(async () => {
+  const sql = await connectToPostgres()
+  const api = createApi({ sql })
+  await api.listen(PORT)
+  // eslint-disable-next-line no-console
+  console.log(`api listening on port ${PORT}`)
+})().catch(err => {
+  console.error(err)
+  process.exit(1)
 })

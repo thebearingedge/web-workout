@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:12-alpine
+    environment:
+      - POSTGRES_DB=webWorkout
+      - POSTGRES_USER=app
+      - POSTGRES_PASSWORD=password
+    tmpfs:
+      - /var/lib/postgresql/data
+    ports:
+      - 5432:5432
+  pgweb:
+    image: sosedoff/pgweb:0.11.6
+    environment:
+      - DATABASE_URL=postgres://app:password@postgres/webWorkout?sslmode=disable
+    depends_on:
+      - postgres
+    ports:
+      - 8081:8081
+    restart: always
