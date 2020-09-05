@@ -84,24 +84,27 @@ test("or is it?", t => {
   const $instructions = document.querySelector('#instructions')
   renderInstructions($instructions, instructions)
 
+  const $report = document.querySelector('#report')
   const $editor = document.querySelector('#editor')
-  const editor = await instantiateEditor($editor)
+  const [editor, runner] = await Promise.all([
+    instantiateEditor($editor),
+    instantiateTestRunner($report)
+  ])
 
   editor.setValue(source)
   $editor.style.visibility = ''
 
-  const $report = document.querySelector('#report')
-  const runner = await instantiateTestRunner($report)
+  await delay(500)
 
-  const $runTests = document.querySelector('#run-tests')
+  document.querySelector('#loading').classList.add('loaded')
 
-  $runTests.addEventListener('click', async () => {
+  document.querySelector('#run-tests').addEventListener('click', async ({ target }) => {
     try {
       const code = editor.getValue().trimRight()
       if (!code) return
-      $runTests.firstElementChild.classList.remove('fas', 'fa-play')
-      $runTests.firstElementChild.classList.add('fa', 'fa-hourglass-half')
-      $runTests.disabled = true
+      target.firstElementChild.classList.remove('fas', 'fa-play')
+      target.firstElementChild.classList.add('fa', 'fa-hourglass-half')
+      target.disabled = true
       const [result] = await Promise.all([
         runner.run({ code, tests }),
         delay(2000)
@@ -110,9 +113,9 @@ test("or is it?", t => {
     } catch (err) {
       console.error(err)
     } finally {
-      $runTests.disabled = false
-      $runTests.firstElementChild.classList.add('fas', 'fa-play')
-      $runTests.firstElementChild.classList.remove('fa', 'fa-hourglass-half')
+      target.disabled = false
+      target.firstElementChild.classList.add('fas', 'fa-play')
+      target.firstElementChild.classList.remove('fa', 'fa-hourglass-half')
     }
   })
 })()
