@@ -93,7 +93,7 @@
     "pg": "^8.3.3",
     "pg-bump": "^3.0.0",
     "pg-lit": "^0.2.0",
-    "prismjs": "^1.21.0",
+    "prismjs": "^1.23.0",
     "promise-retry": "^2.0.1",
     "remark-html": "^12.0.0",
     "remark-parse": "^8.0.3",
