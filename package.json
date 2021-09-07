@@ -95,7 +95,7 @@
     "pg-lit": "^0.2.0",
     "prismjs": "^1.21.0",
     "promise-retry": "^2.0.1",
-    "remark-html": "^12.0.0",
+    "remark-html": "^13.0.2",
     "remark-parse": "^8.0.3",
     "split.js": "^1.6.2",
     "tape": "^5.0.1",
